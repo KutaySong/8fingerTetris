@@ -3,6 +3,8 @@
 
 
 
+
+  16  bug fikslendi SAĞ SOL DUVARA L'ler çakılmıyor
   15  konumla'da İçinden Geçme Engellendi
   14  next5 gösteriliyor
   13  Acemice çalışıyo
@@ -18,7 +20,6 @@
   EKLENECEKLER
 
 
-BUG: L 'de 3'lüye döndürünce eksiye geçiyor
 CANCEL tuş kombinasyonu eklenmeli p.cancel ?? c.sol==0 c.sağ=0 olduğunde RESET gibi tekrar
 
 

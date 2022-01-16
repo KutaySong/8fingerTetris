@@ -4,15 +4,15 @@ const ctx = canvas.getContext('2d');
 const ntx = panel .getContext('2d');
 
 const scale = 40;
-const k= {p:false,hız:1000} // pause;
+const k= {pause:true,hız:1000}
 
 ctx.scale(scale, scale);
 ntx.scale(scale, scale);
 
 
-const tamEn = canvas.width / scale;
-const tamBoy = canvas.height / scale;
-const nextEn = panel.width / scale;
+const tamEn  = canvas.width / scale;
+const tamBoy = canvas.height/ scale;
+const nextEn = panel.width  / scale;
 
 const renkler = [
     null,
@@ -28,6 +28,7 @@ const renkler = [
 let tahta = [];
 let next =  [];
 const rasgele= [];
+const taşÇek = () => {rasgele.shift(); rasgele.push(~~(Math.random() * 7))}
 
 const kaygan = {
     kon: {x: 0, y: 1},
@@ -39,15 +40,8 @@ const kaygan = {
 const hayalet = {
     kon: {x: 0, y: 0},
     tetra: null,
-    renk: '#444444'
+    renk: '#444466'
 }
-
-const taşÇek = () => {rasgele.shift(); rasgele.push(~~(Math.random() * 7))}
-
-taşÇek()
-kaygan.kim.h = "OIZSLJT"[rasgele[0]]
-hayalet.tetra = kaygan.tetra = şekül[kaygan.kim.h][0];
-kaygan.renk = renkler[rasgele[0]+1];
 
 
 function tetraÇiz(tetra, x, y) {
@@ -66,7 +60,6 @@ function çarpışma(kaygan, tahta) {
             return 1;
         }
     }
-    
     return 0;
 }
 
@@ -120,34 +113,41 @@ function nextÇiz () {
     }
 }
 
-function tahtaKur() {
-    tahta = [];
+function kurulum() {
     
-    const r = new Array(tamEn + 2).fill(1);
-    tahta.push(r);
-    
-    for (let i = 0; i < tamBoy; i++) {
-        let satır = new Array(tamEn).fill(0);
-        satır.push(1);
-        satır.unshift(1);
-        
-        tahta.push(satır);
-    }
-    
-    tahta.push(r);
-    tahta.push(r);
-    
-    
-    for (let i = 0; i < 5; i++) 
+    for (let i = 0; i < 6; i++) 
     rasgele.push(~~(Math.random() * 7))
     
+    taşÇek()
+    kaygan.kim.h = "OIZSLJT"[rasgele[0]]
+    hayalet.tetra = kaygan.tetra = şekül[kaygan.kim.h][0];
+    kaygan.renk = renkler[rasgele[0]+1];
+    
+    tahtaKur()
     nextKur()
     gölge()
+    
+    function tahtaKur () {
+        tahta = [];
+        
+        const r = new Array(tamEn + 2).fill(1);
+        tahta.push(r);
+        
+        for (let i = 0; i < tamBoy; i++) {
+            let satır = new Array(tamEn).fill(0);
+            satır.push(1);
+            satır.unshift(1);
+            
+            tahta.push(satır);
+        }   
+        tahta.push(r);
+        tahta.push(r);
+    }
 }
 
 function nextKur () {
     next= []
-
+    
     const r = new Array(nextEn + 2).fill(1);
     next.push(r);
     
@@ -159,7 +159,7 @@ function nextKur () {
         şekül["OIZSLJT"[rasgele[i]]][0].map(ll=> next.push([1,0,...ll,0,0]))
         next.push(satır);
     }
-
+    
     next.push(r);
     next.push(r);
 }
@@ -168,7 +168,7 @@ function nextKur () {
 function gameOver() {
     for (let j = 1; j < tahta[1].length-1; j++)
     if (tahta[1][j])
-    return tahtaKur();
+    return kurulum();
     
     return;
 }
@@ -177,14 +177,14 @@ let aralık = k.hız;
 let passen = 0;
 let sayaç = 0;
 
-   
+
 function güncelle(time = 0) {
     
     const dt = time - passen;
     passen = time;
     sayaç += dt;
     
-    if (sayaç >= aralık && !k.p) {
+    if (sayaç >= aralık && !k.pause) {
         kaygan.kon.y++;
         sayaç = 0;
     }
@@ -209,7 +209,7 @@ function güncelle(time = 0) {
     
     ışınla() && gölge()
     
-    if (aralık==1) { // düşürüp çevirme
+    if (aralık==1) { // düştükten sonra çevirme
         const sonraki= kopi(kaygan)
         sonraki.kon.y++ 
         if (çarpışma(sonraki, tahta))
@@ -218,7 +218,7 @@ function güncelle(time = 0) {
     
     // ctx.fillStyle = "#000";
     // ctx.fillRect(0, 0, canvas.width, canvas.height);
-    dekorAt()
+    dekorAt() // gökkuşağı paterni
     
     ntx.fillStyle = "#041351";
     ntx.fillRect(0, 0, canvas.width, canvas.height);
@@ -262,10 +262,10 @@ document.addEventListener("keydown", event => {
         döndür(kaygan.tetra, -1);
         gölge()
     } else if (event.key==' ') {
-        k.p = !k.p
-        if (!k.p) aralık=1
+        k.pause = !k.pause
+        if (!k.pause) aralık=1
     } else if (event.key=='p') {
-        k.p = !k.p
+        k.pause = !k.pause
     } else if (event.key=='+') {
         k.hız *= 1/2
         aralık= k.hız
@@ -285,5 +285,5 @@ document.addEventListener("keyup", event => {
 
 
 
-tahtaKur();
+kurulum();
 güncelle();

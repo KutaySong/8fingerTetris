@@ -27,41 +27,39 @@ function ışınla () {
     if (c.sağ==-1||(p.rotR && !c.sağ))      {düşür(); pReset(); return true}
     if (c.sol==-1||(p.rotL && !c.sol))      {düşür(); pReset(); return true}
     
+    if (c.sol>0 && c.sol<5)                 {dönder(c.sol)}
+    else if (c.sağ>0 && c.sağ<5)            {dönder(c.sağ)}
     if (c.sol>4 && !p.rotL)                 {konumla(c.sol-4)}
     else if (c.sağ>4 && !p.rotR)            {konumla(c.sağ-10)}
-    if (c.sol>0 && c.sol<5)                 {dönder(c.sol,"L")}
-    else if (c.sağ>0 && c.sağ<5)            {dönder(c.sağ,"R")}
     pset(); return true
     
     function konumla (sütun) {  // 1,2,..,-2,-1
-        let nihai
+        const önceki= kaygan.kon.x
         if (sütun<0) {          // sağda
             const merk= merkezR[kaygan.kim.h][kaygan.kim.r]
             const en= kaygan.tetra[0].length
-            nihai= tamEn-en+merk+sütun+1
+            kaygan.kon.x= tamEn-en+merk+sütun+1
         } else {                //solda
             const merk= merkezL[kaygan.kim.h][kaygan.kim.r]
-            nihai= sütun-merk-1
+            kaygan.kon.x= sütun-merk-1
         }
-
-        if (nihai==kaygan.kon.x) return
-        else if (nihai>kaygan.kon.x) {
-            while (nihai+1>kaygan.kon.x && !çarpışma(kaygan,tahta))
-            kaygan.kon.x++
-            kaygan.kon.x--
-        } else {
-            while (nihai<kaygan.kon.x+1 && !çarpışma(kaygan,tahta))
-            kaygan.kon.x--
-            kaygan.kon.x++
-        }
+        
+        if (çarpışma(kaygan,tahta)) {
+            if (önceki<=kaygan.kon.x) {
+                kaygan.kon.x--
+                while (çarpışma(kaygan,tahta))
+                kaygan.kon.x--
+            } else if (önceki>=kaygan.kon.x){
+                kaygan.kon.x++
+                while (çarpışma(kaygan,tahta))
+                kaygan.kon.x++
+            }
+        } 
     }
     
-    function dönder (rot,el="R") {
-        // console.log(rot,"a döndür")
-        
-        const prot=     kaygan.kim.r
+    function dönder (rot) {
+        const önceki=   kaygan.kim.r
         const boy1=     kaygan.tetra.length
-        const en1=      kaygan.tetra[0].length
         
         if (kaygan.kim.h=="O") return
         else if (kaygan.kim.h=="I") kaygan.kim.r= (rot==1 || rot==2) ? 1 : 0
@@ -73,21 +71,11 @@ function ışınla () {
         
         kaygan.tetra=    şekül[kaygan.kim.h][kaygan.kim.r]
         const boy2=     kaygan.tetra.length
-        const en2=      kaygan.tetra[0].length
-        
-        let fark= en1-en2
-        
-        if (el=="R" && fark>0) {
-            while(fark--&&!çarpışma(kaygan,tahta))
-            kaygan.kon.x++
-        } else if (fark<0) {
-            while(fark++&&!çarpışma(kaygan,tahta))
-            kaygan.kon.x--
-        }
+
         kaygan.kon.y += boy1-boy2
-        
-        if (kaygan.kim.r != prot && kaygan.kim.h=="I") {
-            kaygan.kon.y += prot ? -2 : 2
+
+        if (kaygan.kim.r != önceki && kaygan.kim.h=="I") {
+            kaygan.kon.y += önceki ? -2 : 2
         }
     }
     function pset() {
@@ -97,7 +85,7 @@ function ışınla () {
         if (p.rotL && p.rotR) {p.rotL=false; p.rotR=false}
     }
     function pReset() {p.sol=0; p.sağ=0; p.rotL= false; p.rotR= false }
-    function düşür () {aralık=1}
+    function düşür () {aralık=1; if(k.pause)k.pause=false}
     function cÇıkar () {
         if ((       klavye['q'] &&  klavye['r']) || klavye['t'])    c.sol= 9
         else if (   klavye['w'] &&  klavye['e'] &&  klavye['r'])    c.sol= 3
@@ -128,7 +116,7 @@ function ışınla () {
 }
 
 
-function döndür () {
+function döndür () { // ok tuşları ile
     kaygan.kim.r= ++kaygan.kim.r%şekül[kaygan.kim.h].length
     kaygan.tetra=    şekül[kaygan.kim.h][kaygan.kim.r]
     kaygan.kon.x += kaymaX[kaygan.kim.h][kaygan.kim.r]
