@@ -1,0 +1,31 @@
+
+
+
+
+
+  15  konumla'da İçinden Geçme Engellendi
+  14  next5 gösteriliyor
+  13  Acemice çalışıyo
+  12  K + DF  kombinasyonu çalışmadığı için yeni TUŞLAR: QWER-T H-JKLŞ 
+  11  düşür fonksiyonunu yutuyor
+  10  çalışmasa da çalışıyor
+
+
+
+
+
+
+  EKLENECEKLER
+
+
+BUG: L 'de 3'lüye döndürünce eksiye geçiyor
+CANCEL tuş kombinasyonu eklenmeli p.cancel ?? c.sol==0 c.sağ=0 olduğunde RESET gibi tekrar
+
+
+
+
+
+  AMAÇ
+TEtris kontrollerini modifiyeleyeceğim
+
+

@@ -1,0 +1,36 @@
+/* html, body {
+    background-color: rgb(14, 23, 71);
+    display:flex
+}
+
+canvas {
+    position: absolute;
+    padding: 0;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border: 5px solid #fff;
+}  */
+
+
+body {
+    background-color: rgb(14, 23, 71);
+    right: 100;
+    display: flex;
+    text-align: center;
+}
+
+.tahta {
+    flex: 1 1 auto;
+}
+.panel {
+    flex: 1 1 auto;
+    text-align: start;
+}
+
+canvas {
+    border: solid .15em #fff;
+    height: 90vh;
+}
